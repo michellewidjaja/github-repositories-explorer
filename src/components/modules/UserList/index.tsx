@@ -61,7 +61,7 @@ function UserList({ resultList }: UserListProps) {
                   <Card key={`repos-${key}`} className="hover:bg-gray-50">
                     <CardHeader>
                       <CardTitle className="flex items-center justify-between gap-2">
-                        <div className="flex gap-2 items-center">
+                        <div className="flex gap-2 flex-col lg:!flex-row lg:items-center">
                           {repo.name}
                           <Badge className="rounded-xl text-[12px]">{repo.visibility}</Badge>
                         </div>

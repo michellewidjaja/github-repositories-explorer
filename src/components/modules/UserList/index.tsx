@@ -19,6 +19,7 @@ interface UserListProps {
 function UserList({ resultList }: UserListProps) {
   const [reposList, setReposList] = useState<ReposList[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openedUserKey, setOpenedUserKey] = useState<string | null>(null);
   const userData = resultList && resultList?.items?.length > 0 ? resultList.items : null;
 
   const handleClickUser = async (url: string) => {
@@ -37,6 +38,19 @@ function UserList({ resultList }: UserListProps) {
     setReposList(data);
     setIsLoading(false);
   }
+
+  const handleAccordionChange = (value: string) => {
+    if (value) {
+      const user = userData?.[parseInt(value.replace("user-", ""))];
+      if (user && value !== openedUserKey) {
+        setOpenedUserKey(value);
+        handleClickUser(user.repos_url);
+      }
+    } else {
+      setOpenedUserKey(null);
+      setReposList([]);
+    }
+  };
   
   return (
     <div className="mt-4">
@@ -44,11 +58,12 @@ function UserList({ resultList }: UserListProps) {
         type="single"
         collapsible
         className="w-full"
+        onValueChange={handleAccordionChange}
       >
         {
           userData?.map((user, key) => (
             <AccordionItem value={`user-${key}`} key={`user-${key}`}>
-              <AccordionTrigger className="rounded-none cursor-pointer items-center" onClick={() => handleClickUser(user.repos_url)}>
+              <AccordionTrigger className="rounded-none cursor-pointer items-center">
                 <div className="flex flex-row gap-4 items-center">
                   <img src={user.avatar_url} width={50} height={50} alt={`img-${user.login}`} className="rounded" />
                   {user.login}
@@ -58,22 +73,24 @@ function UserList({ resultList }: UserListProps) {
               {
                 reposList.length > 0 ? 
                 reposList.map((repo, key) => (
-                  <Card key={`repos-${key}`} className="hover:bg-gray-50">
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between gap-2">
-                        <div className="flex gap-2 flex-col lg:!flex-row lg:items-center">
-                          {repo.name}
-                          <Badge className="rounded-xl text-[12px]">{repo.visibility}</Badge>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          <Star size={16}/>{repo.stargazers_count}
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {repo.description || "No description"}
-                    </CardContent>
-                  </Card>
+                  <a target="_blank" href={repo.html_url} rel="noopener noreferrer" className="block">
+                    <Card key={`repos-${key}`} className="hover:bg-gray-50">
+                      <CardHeader>
+                        <CardTitle className="flex items-center justify-between gap-2">
+                          <div className="flex gap-2 flex-col lg:!flex-row lg:items-center">
+                            {repo.name}
+                            <Badge className="rounded-xl text-[12px]">{repo.visibility}</Badge>
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <Star size={16}/>{repo.stargazers_count}
+                          </div>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        {repo.description || "No description"}
+                      </CardContent>
+                    </Card>
+                  </a>
                 ))
                 : isLoading ? "Loading..." : "No repository"
               }

@@ -32,6 +32,7 @@ export interface ReposList {
   description: string;
   visibility: string;
   stargazers_count: number;
+  html_url: string;
   owner: {
     avatar: string;
   };

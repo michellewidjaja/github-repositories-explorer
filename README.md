@@ -1,4 +1,4 @@
-# GitHub User Search
+# GitHub Repositories Explorer
 A simple and responsive web app to search GitHub users and view their public repositories. Built with React, Vite, ShadCN UI, and styled using Tailwind CSS. Includes unit tests with Vitest and Testing Library.
 
 # ✨ Features

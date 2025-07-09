@@ -26,3 +26,14 @@ ShadCN UI
 Sonner (toast notifications)
 
 Vitest + @testing-library/react
+
+# Getting Started
+```
+npm install
+npm run dev
+```
+
+Create a .env file with:
+```
+VITE_GITHUB_TOKEN=your_github_token
+```
